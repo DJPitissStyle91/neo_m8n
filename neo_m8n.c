@@ -10,6 +10,8 @@ void neom8n_get_gps_status(const uart_port_t uart_num, int buffer_size, neom8n_g
 	int length = 0;
 	char sentence[buffer_size];
 
+	float latitude_dm = 0;
+	float longtitude_dm = 0;
 
 	while (1) {
 
@@ -82,9 +84,12 @@ void neom8n_get_gps_status(const uart_port_t uart_num, int buffer_size, neom8n_g
 
 
 				if (neom8n_gps_status->is_active && latitude_temp != NULL && longtitude_temp != NULL) {
+					
+					latitude_dm = strtof(latitude_temp, NULL) / 100;
+					longtitude_dm = strtof(longtitude_temp, NULL) / 100;
 
-					neom8n_gps_status->latitude = strtof(latitude_temp, NULL) / 100;
-					neom8n_gps_status->longtitude = strtof(longtitude_temp, NULL) / 100;
+					neom8n_gps_status->latitude = (int) latitude_dm + (latitude_dm - (int) latitude_dm) * 5 / 3 ;
+					neom8n_gps_status->longtitude = (int) longtitude_dm + (longtitude_dm - (int) longtitude_dm) * 5 / 3 ;
 
 				}
 
