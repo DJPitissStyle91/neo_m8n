@@ -10,8 +10,14 @@ void neom8n_get_gps_status(const uart_port_t uart_num, int buffer_size, neom8n_g
 	int length = 0;
 	char sentence[buffer_size];
 
+	bool is_north;
+	bool is_east;
+
 	float latitude_dm = 0;
 	float longtitude_dm = 0;
+
+	float latitude = 0;
+	float longtitude = 0;
 
 	while (1) {
 
@@ -41,9 +47,7 @@ void neom8n_get_gps_status(const uart_port_t uart_num, int buffer_size, neom8n_g
 							else {
 								neom8n_gps_status->is_active = false;
 								neom8n_gps_status->latitude = 0;
-								neom8n_gps_status->is_north = true;
 								neom8n_gps_status->longtitude = 0;
-								neom8n_gps_status->is_east = true;
 								break;
 							}
 						}
@@ -54,7 +58,7 @@ void neom8n_get_gps_status(const uart_port_t uart_num, int buffer_size, neom8n_g
 						}
 
 						if (j == 3) {
-							neom8n_gps_status->is_north = (sentence[i] == 'N');
+							is_north = (sentence[i] == 'N');
 						}
 
 						if (j == 4) {
@@ -62,7 +66,7 @@ void neom8n_get_gps_status(const uart_port_t uart_num, int buffer_size, neom8n_g
 						}
 
 						if (j == 5) {
-							neom8n_gps_status->is_east = (sentence[i] == 'E');
+							is_east = (sentence[i] == 'E');
 						}
 
 					}
@@ -88,9 +92,19 @@ void neom8n_get_gps_status(const uart_port_t uart_num, int buffer_size, neom8n_g
 					latitude_dm = strtof(latitude_temp, NULL) / 100;
 					longtitude_dm = strtof(longtitude_temp, NULL) / 100;
 
-					neom8n_gps_status->latitude = (int) latitude_dm + (latitude_dm - (int) latitude_dm) * 5 / 3 ;
-					neom8n_gps_status->longtitude = (int) longtitude_dm + (longtitude_dm - (int) longtitude_dm) * 5 / 3 ;
+					latitude = (int) latitude_dm + (latitude_dm - (int) latitude_dm) * 5 / 3 ;
+					longtitude = (int) longtitude_dm + (longtitude_dm - (int) longtitude_dm) * 5 / 3 ;
 
+					if (!is_north) {
+						latitude = (-1)*latitude;
+					}
+
+					if (!is_east) {
+						longtitude = (-1)*longtitude;
+					}
+
+					neom8n_gps_status->latitude = latitude;
+					neom8n_gps_status->longtitude = longtitude;
 				}
 
 				break;
