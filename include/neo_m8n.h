@@ -1,6 +1,8 @@
 #ifndef NEO_M8N_H
 #define NEO_M8N_H
 
+#include "driver/uart.h"
+
 typedef struct {
 
 	char time[7];
