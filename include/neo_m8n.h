@@ -7,8 +7,8 @@ typedef struct {
 
 	char time[7];
 	bool is_active;
-	float latitude;
-	float longtitude;
+	double latitude;
+	double longtitude;
 
 } neom8n_gps_status_t;
 

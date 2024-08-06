@@ -13,11 +13,11 @@ void neom8n_get_gps_status(const uart_port_t uart_num, int buffer_size, neom8n_g
 	bool is_north;
 	bool is_east;
 
-	float latitude_dm = 0;
-	float longtitude_dm = 0;
+	double latitude_dm = 0;
+	double longtitude_dm = 0;
 
-	float latitude = 0;
-	float longtitude = 0;
+	double latitude = 0;
+	double longtitude = 0;
 
 	while (1) {
 
